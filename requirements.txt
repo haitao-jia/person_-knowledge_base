@@ -1,0 +1,26 @@
+# ============================================================
+# 文件名：requirements.txt
+# 作用：项目 Python 依赖清单，声明后端所需全部第三方包。
+# 对应规范：SPEC.md §3.3 依赖清单、§3.4 版本锁定策略
+# 说明：首次安装并全部测试通过后，执行
+#       pip freeze > requirements-lock.txt
+#       部署与 CI 以锁定文件为准，升级依赖必须回归测试。
+# ============================================================
+
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic-settings
+sqlalchemy>=2.0
+psycopg[binary]
+pgvector
+langchain-core
+langchain-text-splitters
+langchain-openai
+pymupdf
+python-docx
+openpyxl
+pandas
+httpx
+pytest
+pytest-asyncio

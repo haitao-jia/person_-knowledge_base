@@ -1,0 +1,26 @@
+# ============================================================
+# 文件名：docker-compose.yml
+# 作用：Docker Compose 部署编排。启动 PostgreSQL 16 + pgvector
+#       容器作为项目数据库，供应用与本地开发连接。
+# 对应规范：SPEC.md §11.1 docker-compose.yml、§11.2 数据库初始化
+# 说明：
+#   - 主机端口固定 5433，避免与本机已有 PostgreSQL 冲突
+#   - 启动后需执行：CREATE EXTENSION IF NOT EXISTS vector;
+#   - 生产环境必须修改 POSTGRES_PASSWORD
+# ============================================================
+
+services:                            # 声明要编排的服务列表
+  postgres:                          # 服务名（内部标识，可自定义）
+    image: pgvector/pgvector:pg16    # 使用的镜像：PostgreSQL 16 且预装 pgvector
+    container_name: enterprise-rag-db  # 容器固定名（后续 docker exec 用它定位）
+    restart: unless-stopped          # 容器意外退出时自动重启（除非你手动 stop）
+    environment:                     # 注入容器的环境变量（首次初始化时生效）
+      POSTGRES_USER: raguser         #   → 自动创建数据库用户 raguser
+      POSTGRES_PASSWORD: change_this_password  # → 该用户的密码
+      POSTGRES_DB: enterprise_rag    #   → 自动创建数据库 enterprise_rag
+    ports:                           # 端口映射（主机:容器）
+      - "5433:5432"                  #   主机访问 5433 → 容器内 PG 默认端口 5432
+    volumes:                         # 数据持久化
+      - rag_pgdata:/var/lib/postgresql/data  # 数据库文件存到命名卷，容器删除数据不丢
+volumes:
+  rag_pgdata:                        # 声明名为 rag_pgdata 的命名卷

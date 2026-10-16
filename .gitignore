@@ -1,0 +1,18 @@
+# ============================================================
+# 文件名：.gitignore
+# 作用：Git 忽略规则，防止密钥、依赖环境与上传文档入库。
+# 对应规范：SPEC.md 附录 A .gitignore 规范
+# 禁止提交：企业文档、模型密钥、数据库密码
+# ============================================================
+
+.env
+.venv/
+.idea/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+storage/uploads/*
+!storage/uploads/.gitkeep
+
+# PyCharm 建项目时自动生成的模板文件（真正入口是 app/main.py）
+/main.py
